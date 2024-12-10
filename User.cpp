@@ -12,3 +12,8 @@ User::User(string Name, long Id, string Phone_num,long Password){
     this->Phone_Number=Phone_num;
     this->Password=Password;
 }
+
+long long User::get_id() const {
+    return id;
+}
+

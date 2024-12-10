@@ -14,16 +14,24 @@ using namespace std;
 //vector<Patient> patients = Patient::readFromFile(filename);
 //vector<Doctor> doctors = Doctor::readFromFile(filename);
 
-bool validate_id(long long id){
-    if (id==0 || to_string(id).length()!=9)
+bool validate_id(long id){
+    string id_str= to_string(id);
+    if (id_str.length()!=9){
         return false;
+    }
+    return true;
+}
+bool validate_phone_number(string phone_num){
+    if (phone_num.length()!=10){
+        return false;
+    }
     return true;
 }
 Patient Register_patient(){
     string Name,Phone_number,Health_provider;
     long long id,password;
     cout<<endl;
-    cout<<"=====================[Patient Registration]====================="<<endl;
+    cout<<"*=====================[Patient Registration]=====================*"<<endl;
     cout<<"System is ready to start registration process!"<<endl;
     cout<<"Please Enter you full name:"<<endl;
     getline(cin,Name);
@@ -33,21 +41,70 @@ Patient Register_patient(){
         if (!validate_id(id)) {
             cout << "Invalid ID. Please try again." << endl;
         }
-    } while (!validate_id(id));
+    } while(!validate_id(id));
     cout<<"Please Enter your health care provider:"<<endl;
     cin>>Health_provider;
-    cout<<"Please Enter your phone number:"<<endl;
-    cin>>Phone_number;
+    do {
+        cout << "Please Enter your phone number:" << endl;
+        cin >> Phone_number;
+        if (!validate_phone_number(Phone_number)) {
+            cout << "Invalid Phone number,please try again" << endl;
+        }
+    } while (!validate_phone_number(Phone_number));
     cout<<"Enter a strong password for you account (password must consist of numbers only):"<<endl;
     cin>>password;
     cout<<"Registration is OK!"<<endl;
-    cout<<"===================[Patient Registration Completed!]==================="<<endl;
+    cout<<"*===================[Patient Registration Completed!]===================*"<<endl;
     Patient returned_patient(Name,id,Phone_number,password,Health_provider);
     returned_patient.saveToFile(PATIENTSFILE);
     return returned_patient;
 }
 
+Doctor Register_doctor(){
+    string Name,Phone_number,area,specialization;
+    long long id,password,licence;
+    cout<<endl;
+    cout<<"*=====================[Doctors Registration]=====================*"<<endl;
+    cout<<"System is ready to start registration process!"<<endl;
+    cout<<"Please Enter you full name:"<<endl;
+    getline(cin,Name);
+    do {
+        cout<<"Please Enter your id number(9-Digits number):"<<endl;
+        cin >> id;
+        if (!validate_id(id)){
+            cout << "Invalid ID. Please try again." << endl;
+        }
+    } while (!validate_id(id));
+    cout<<"Please Enter your medical licence number:"<<endl;
+    cin>>licence;
+    cout<<"Please Enter your medical specialization:"<<endl;
+    cin>>specialization;
+    cout<<"Please Enter where you receive your patients (area):"<<endl;
+    cin>>area;
+    do {
+        cout << "Please Enter your phone number:" << endl;
+        cin >> Phone_number;
+        if (!validate_phone_number(Phone_number)) {
+            cout << "Invalid Phone number,please try again" << endl;
+        }
+    } while (!validate_phone_number(Phone_number));
+    cout<<"Enter a strong password for you account (password must consist of numbers only):"<<endl;
+    cin>>password;
+    cout<<"Registration is OK!"<<endl;
+    cout<<"*===================[Doctors Registration Completed!]===================*"<<endl;
+    Doctor returned_doctor(Name,id,Phone_number,password,area,specialization,licence);
+    returned_doctor.saveToFile(DOCTORSFILE);
+    return returned_doctor;
+}
 
-int main(){
+int main() {
+    vector<Patient> patients = Patient::readFromFile(PATIENTSFILE);
+    vector<Doctor> doctors = Doctor::readFromFile(DOCTORSFILE);
+    for (int i = 0; i < patients.size(); ++i){
+        cout<<patients[i].get_id()<<endl;
+    }
+    for (int i = 0; i < doctors.size(); ++i){
+        cout<<doctors[i].get_id()<<endl;
+    }
 
 }

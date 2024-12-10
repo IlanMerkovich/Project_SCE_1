@@ -11,12 +11,13 @@ using namespace std;
 class User{
 protected:
     string Name;
-    long id;
+    long long id;
     long Password;
     string Phone_Number;
 public:
     User(string Name,long Id,string Phone_num,long Password);
     virtual char *get_type()const=0;
+    long long get_id()const;
 };
 
 

@@ -37,6 +37,7 @@ vector<Patient> Patient::readFromFile(const string &filename) {
         long id, password;
         while (getline(file, name)) {
             if (name == "-------------------") {
+                continue;
             }
             file >> id;
             file.ignore();
