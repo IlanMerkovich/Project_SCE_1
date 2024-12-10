@@ -173,12 +173,8 @@ int Login_Patient(){
     return -1;
 }
 void displayDoctorMenu(){
-    cout << "*************************************************" << endl;
-    cout << "*              WELCOME, DOCTOR!                 *" << endl;
-    cout << "*************************************************" << endl;
 }
 void displayPatientMenu(){
-
 }
 
 int main()
@@ -194,6 +190,15 @@ int main()
                 displayFirstScreen();
                 cin>>reg_log_choice;
                 if (reg_log_choice==1){
+                    int index=Login_Doctor();
+                    if (index==-1) {
+                        cout << "Could not log you in! Please check your id or password!" << endl;
+                    }
+                    else{
+                        while(true){
+                            
+                        }
+                    }
 
                 }
                 if (reg_log_choice==2){
@@ -211,7 +216,15 @@ int main()
                 displayFirstScreen();
                 cin >> reg_log_choice;
                 if (reg_log_choice == 1){
+                    int index=Login_Patient();
+                    if (index==-1){
+                        cout << "Could not log you in! Please check your id or password!" << endl;
+                    }
+                    else{
+                        while(true){
 
+                        }
+                    }
                 }
                 if (reg_log_choice == 2){
                     Patients.push_back(Register_patient());
