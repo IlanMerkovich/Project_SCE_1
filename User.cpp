@@ -21,3 +21,7 @@ string User::get_name() const {
     return Name;
 }
 
+long User::get_password() const {
+    return Password;
+}
+

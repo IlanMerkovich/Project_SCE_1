@@ -112,13 +112,22 @@ Doctor Register_doctor(){
 }
 void displayWelcomeScreen() {
     cout<<endl;
-    cout << "==============================================" << endl;
-    cout << "       Welcome to the Appointment System " << endl;
-    cout << "==============================================" << endl;
-    cout << "Are you a: " << endl;
-    cout << "1. Doctor" << endl;
-    cout << "2. Patient" << endl;
-    cout << "==============================================" << endl;
+    cout << "==================================================" << endl;
+    cout << "*                                                *" << endl;
+    cout << "*             WELCOME TO HEALTH4U                *" << endl;
+    cout << "*                                                *" << endl;
+    cout << "**************************************************" << endl;
+    cout << "*                                                *" << endl;
+    cout << "*  Your health, your priority. Anytime, Anywhere *" << endl;
+    cout << "*                                                *" << endl;
+    cout << "**************************************************" << endl;
+    cout << endl;
+    cout<< endl;
+    cout<<  "==================================================" <<endl;
+    cout << "                 Are you a: " << endl;
+    cout << "                 1. Doctor" << endl;
+    cout << "                 2. Patient" << endl;
+    cout << "==================================================" << endl;
     cout << "Please select your role (1-2): ";
 }
 void displayFirstScreen() {
@@ -126,39 +135,94 @@ void displayFirstScreen() {
     cout << "==============================================" << endl;
     cout << "       Welcome to the Appointment System " << endl;
     cout << "==============================================" << endl;
-    cout<<"What would you like to do?"<<endl;
-    cout << "1. Login" << endl;
-    cout << "2. Register" << endl;
-    cout << "3. Exit" << endl;
+    cout<<  "         What would you like to do?"<<endl;
+    cout << "              1. Login" << endl;
+    cout << "              2. Register" << endl;
+    cout << "              3. Exit to main menu" << endl;
     cout << "==============================================" << endl;
     cout << "Please select an option (1-3): ";
 }
+int Login_Doctor(){
+    long id=0,password=0;
+    cout << "===============================" << endl;
+    cout << "Enter your ID (9-Digits):"<<endl;
+    cin >>id;
+    cout << "Enter your password:"<<endl;
+    cin>> password;
+    cout << "===============================" << endl;
+    for (int i = 0; i < Doctors.size(); ++i){
+        if (Doctors[i].get_id()==id && Doctors[i].get_password()==password){
+            return i;
+        }
+    }
+    return -1;
+}
+int Login_Patient(){
+    long id=0,password=0;
+    cout << "===============================" << endl;
+    cout << "Enter your ID (9-Digits):"<<endl;
+    cin >>id;
+    cout << "Enter your password:"<<endl;
+    cin>> password;
+    cout << "===============================" << endl;
+    for (int i = 0; i < Patients.size(); ++i){
+        if (Patients[i].get_id()==id && Patients[i].get_password()==password){
+            return i;
+        }
+    }
+    return -1;
+}
+void displayDoctorMenu(){
+    cout << "*************************************************" << endl;
+    cout << "*              WELCOME, DOCTOR!                 *" << endl;
+    cout << "*************************************************" << endl;
+}
+void displayPatientMenu(){
 
-int main(){
+}
+
+int main()
+{
     int choice=0;
-    displayWelcomeScreen();
-    cin>>choice;
-    switch (choice){
-        int reg_log_choice;
-        case 1:
-            displayFirstScreen();
-            cin>>reg_log_choice;
-            if (reg_log_choice==2){
-                Doctors.push_back(Register_doctor());
+    while(true)
+    {
+        displayWelcomeScreen();
+        cin>>choice;
+        while(true){
+            int reg_log_choice=0;
+            if (choice==1){ //doctor//
+                displayFirstScreen();
+                cin>>reg_log_choice;
+                if (reg_log_choice==1){
+
+                }
+                if (reg_log_choice==2){
+                    Doctors.push_back(Register_doctor());
+                    reg_log_choice=0;
+                }
+                if (reg_log_choice==3){
+                    cout<<"====================="<<endl;
+                    cout<<"Exiting to main menu!"<<endl;
+                    cout<<"====================="<<endl;
+                    break;
+                }
             }
-            break;
-        case 2:
-            displayFirstScreen();
-            cin>>reg_log_choice;
-            if (reg_log_choice==2){
-                Patients.push_back(Register_patient());
+            if (choice==2){ //patient//
+                displayFirstScreen();
+                cin >> reg_log_choice;
+                if (reg_log_choice == 1){
+
+                }
+                if (reg_log_choice == 2){
+                    Patients.push_back(Register_patient());
+                }
+                if (reg_log_choice==3){ //exit to main menu//
+                    cout<<"====================="<<endl;
+                    cout<<"Exiting to main menu!"<<endl;
+                    cout<<"====================="<<endl;
+                    break;
+                }
             }
-            cout<<endl;
-            break;
-        case 3:
-            cout<<endl;
-            break;
-        default:
-            cout<<"Invalid choice,please try again!"<<endl;
+        }
     }
 }
