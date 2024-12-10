@@ -49,7 +49,5 @@ Patient Register_patient(){
 
 
 int main(){
-    vector<Patient>Patients;
-    Patients.push_back(Register_patient());
-    cout<<Patients[0].get_type();
+
 }
