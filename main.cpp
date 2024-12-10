@@ -34,6 +34,7 @@ Patient Register_patient(){
     cout<<"*=====================[Patient Registration]=====================*"<<endl;
     cout<<"System is ready to start registration process!"<<endl;
     cout<<"Please Enter you full name:"<<endl;
+    cin.ignore();
     getline(cin,Name);
     do {
         cout<<"Please Enter your id number(9-Digits number):"<<endl;
@@ -67,6 +68,7 @@ Doctor Register_doctor(){
     cout<<"*=====================[Doctors Registration]=====================*"<<endl;
     cout<<"System is ready to start registration process!"<<endl;
     cout<<"Please Enter you full name:"<<endl;
+    cin.ignore();
     getline(cin,Name);
     do {
         cout<<"Please Enter your id number(9-Digits number):"<<endl;
@@ -96,15 +98,57 @@ Doctor Register_doctor(){
     returned_doctor.saveToFile(DOCTORSFILE);
     return returned_doctor;
 }
+void displayWelcomeScreen() {
+    cout<<endl;
+    cout << "==============================================" << endl;
+    cout << "       Welcome to the Appointment System " << endl;
+    cout << "==============================================" << endl;
+    cout << "Are you a: " << endl;
+    cout << "1. Doctor" << endl;
+    cout << "2. Patient" << endl;
+    cout << "==============================================" << endl;
+    cout << "Please select your role (1-2): ";
+}
+void displayFirstScreen() {
+    cout<<endl;
+    cout << "==============================================" << endl;
+    cout << "       Welcome to the Appointment System " << endl;
+    cout << "==============================================" << endl;
+    cout<<"What would you like to do?"<<endl;
+    cout << "1. Login" << endl;
+    cout << "2. Register" << endl;
+    cout << "3. Exit" << endl;
+    cout << "==============================================" << endl;
+    cout << "Please select an option (1-3): ";
+}
 
-int main() {
+int main(){
     vector<Patient> patients = Patient::readFromFile(PATIENTSFILE);
     vector<Doctor> doctors = Doctor::readFromFile(DOCTORSFILE);
-    for (int i = 0; i < patients.size(); ++i){
-        cout<<patients[i].get_id()<<endl;
+    int choice=0;
+    displayWelcomeScreen();
+    cin>>choice;
+    switch (choice){
+        int reg_log_choice;
+        case 1:
+            displayFirstScreen();
+            cin>>reg_log_choice;
+            if (reg_log_choice==2){
+                doctors.push_back(Register_doctor());
+            }
+            break;
+        case 2:
+            displayFirstScreen();
+            cin>>reg_log_choice;
+            if (reg_log_choice==2){
+                patients.push_back(Register_patient());
+            }
+            cout<<endl;
+            break;
+        case 3:
+            cout<<endl;
+            break;
+        default:
+            cout<<"Invalid choice,please try again!"<<endl;
     }
-    for (int i = 0; i < doctors.size(); ++i){
-        cout<<doctors[i].get_id()<<endl;
-    }
-
 }
