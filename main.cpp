@@ -11,13 +11,18 @@
 #define DOCTORSFILE "Doctors.txt"
 using namespace std;
 
-//vector<Patient> patients = Patient::readFromFile(filename);
-//vector<Doctor> doctors = Doctor::readFromFile(filename);
+vector<Patient> patients = Patient::readFromFile(PATIENTSFILE);
+vector<Doctor> doctors = Doctor::readFromFile(DOCTORSFILE);
 
 bool validate_id(long id){
     string id_str= to_string(id);
     if (id_str.length()!=9){
         return false;
+    }
+    for (int i = 0; i < patients.size(); ++i){
+        if (patients[i].get_id()==id || doctors[i].get_id()==id){
+            return false;
+        }
     }
     return true;
 }
@@ -123,8 +128,6 @@ void displayFirstScreen() {
 }
 
 int main(){
-    vector<Patient> patients = Patient::readFromFile(PATIENTSFILE);
-    vector<Doctor> doctors = Doctor::readFromFile(DOCTORSFILE);
     int choice=0;
     displayWelcomeScreen();
     cin>>choice;
