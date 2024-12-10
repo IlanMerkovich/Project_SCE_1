@@ -17,6 +17,7 @@ protected:
 public:
     User(string Name,long Id,string Phone_num,long Password);
     virtual char *get_type()const=0;
+    string get_name()const;
     long long get_id()const;
 };
 

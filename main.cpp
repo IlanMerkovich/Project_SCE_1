@@ -9,18 +9,25 @@
 #include "limits"
 #define PATIENTSFILE "Patients.txt"
 #define DOCTORSFILE "Doctors.txt"
+#define APPOINTMENTSFILE "Appointments.txt"
 using namespace std;
 
-vector<Patient> patients = Patient::readFromFile(PATIENTSFILE);
-vector<Doctor> doctors = Doctor::readFromFile(DOCTORSFILE);
+vector<Patient> Patients = Patient::readFromFile(PATIENTSFILE);
+vector<Doctor> Doctors = Doctor::readFromFile(DOCTORSFILE);
+vector<Appointment> Appointments = Appointment::readFromFile(APPOINTMENTSFILE);
 
 bool validate_id(long id){
     string id_str= to_string(id);
     if (id_str.length()!=9){
         return false;
     }
-    for (int i = 0; i < patients.size(); ++i){
-        if (patients[i].get_id()==id || doctors[i].get_id()==id){
+    for (int i = 0; i < Patients.size(); ++i){
+        if (Patients[i].get_id()==id){
+            return false;
+        }
+    }
+    for (int i = 0; i < Doctors.size(); ++i){
+        if (Doctors[i].get_id()==id){
             return false;
         }
     }
@@ -137,14 +144,14 @@ int main(){
             displayFirstScreen();
             cin>>reg_log_choice;
             if (reg_log_choice==2){
-                doctors.push_back(Register_doctor());
+                Doctors.push_back(Register_doctor());
             }
             break;
         case 2:
             displayFirstScreen();
             cin>>reg_log_choice;
             if (reg_log_choice==2){
-                patients.push_back(Register_patient());
+                Patients.push_back(Register_patient());
             }
             cout<<endl;
             break;

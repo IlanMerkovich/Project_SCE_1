@@ -17,3 +17,7 @@ long long User::get_id() const {
     return id;
 }
 
+string User::get_name() const {
+    return Name;
+}
+
