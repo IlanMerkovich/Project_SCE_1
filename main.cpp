@@ -128,6 +128,8 @@ void displayWelcomeScreen() {
     cout << "                 1. Doctor" << endl;
     cout << "                 2. Patient" << endl;
     cout << "==================================================" << endl;
+    cout << "          [To turn off system select 3]          " << endl;
+    cout << endl;
     cout << "Please select your role (1-2): ";
 }
 void displayFirstScreen() {
@@ -173,8 +175,57 @@ int Login_Patient(){
     return -1;
 }
 void displayDoctorMenu(){
+    cout << "*************************************************" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*              WELCOME, DOCTOR!                 *" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*       Here are your available options:        *" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "1. View Profile" << endl;
+    cout << "2. View Appointments" << endl;
+    cout << "3. Mark Unavailable Dates" << endl;
+    cout << "4. Update Past Appointments and Add Summary" << endl;
+    cout << "5. Add Appointments" << endl;
+    cout << "6. View Patient Ratings" << endl;
+    cout << "7. Logout" << endl;
+    cout << "-------------------------------------------------" << endl;
+    cout << "Enter your choice (1-7): "<<endl;
+    cout << "-------------------------------------------------" << endl;
 }
 void displayPatientMenu(){
+    cout << "*************************************************" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*              WELCOME, PATIENT!                *" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*        Here are your available options:       *" << endl;
+    cout << "*                                               *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "1. View Profile" << endl;
+    cout << "2. View My Scheduled Appointments" << endl;
+    cout << "3. View All Available Appointments (with Filters)" << endl;
+    cout << "4. Book an Appointment" << endl;
+    cout << "5. Cancel an Appointment" << endl;
+    cout << "6. View Past Appointment Summaries" << endl;
+    cout << "7. Rate a Doctor for a Past Appointment" << endl;
+    cout << "8. View First Aid Instructions" << endl;
+    cout << "9. Logout" << endl;
+    cout << "-------------------------------------------------" << endl;
+    cout << "Enter your choice (1-9): "<<endl;
+    cout << "-------------------------------------------------" << endl;
+}
+void createAppointmentsForDate(const string &date, long doctorID, const string &area){
+    for (int hour = 9; hour <= 17; ++hour) {
+        string time = (hour < 10 ? "0" : "") + to_string(hour) + ":00";
+        Appointment newAppointment(date, time,area,doctorID);
+        newAppointment.saveToFile(APPOINTMENTSFILE);
+        Appointments.push_back(newAppointment);
+    }
+    cout << "Appointments created successfully for date " << date << " from 9:00 to 17:00." << endl;
 }
 
 int main()
@@ -196,7 +247,7 @@ int main()
                     }
                     else{
                         while(true){
-                            
+                            displayDoctorMenu();
                         }
                     }
 
@@ -235,6 +286,9 @@ int main()
                     cout<<"====================="<<endl;
                     break;
                 }
+            }
+            if (choice==3){
+                exit(0);
             }
         }
     }
