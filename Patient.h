@@ -16,6 +16,10 @@ public:
     char *get_type()const;
     void saveToFile(const string &filename) const;
     static vector<Patient> readFromFile(const string &filename);
+    string get_health_provider()const;
+    void set_phone(string phone_num);
+    void set_healt_care(string health_care);
+
 };
 
 

@@ -44,9 +44,10 @@ void Appointment::Cancel_Appointment(){
     else
         cout<<"This appointment is not booked."<<endl;
 }
-Appointment::Appointment(const string date, const string time,const string Area,long Doc_id){
+Appointment::Appointment(const string date, const string time,const string Area,long Doc_id,string specialization){
     this->Date=date;
     this->Time=time;
+    this->specialization=specialization;
     is_booked=0;
     is_over=0;
     is_canceled=0;
@@ -72,6 +73,7 @@ void Appointment::saveToFile(const string &filename) const{
         file<<Patient_ID<<endl;
         file<<Area<<endl;
         file<<rating<<endl;
+        file<<specialization<<endl;
         file << "--------------------" << endl;
         file.close();
     }
@@ -84,7 +86,7 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
     ifstream file(filename);
     vector<Appointment> appointments;
     if (file.is_open()) {
-        string date, time, doctorSummary, area;
+        string date, time, doctorSummary, area,specialization;
         bool isOver, isBooked, isCanceled;
         long doctorID, patientID;
         int rating;
@@ -107,7 +109,9 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
             getline(file, area);
             file >> rating;
             file.ignore();
-            Appointment appointment(date,time,area,doctorID);
+            getline(file,specialization);
+            file.ignore();
+            Appointment appointment(date,time,area,doctorID,specialization);
             appointment.Add_Summary(doctorSummary);
             appointment.is_over = isOver;
             appointment.is_booked = isBooked;
@@ -116,6 +120,7 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
             appointment.Patient_ID = patientID;
             appointment.Area = area;
             appointment.rating=rating;
+            appointment.specialization=specialization;
             appointments.push_back(appointment);
         }
         file.close();
@@ -156,6 +161,10 @@ void Appointment::set_pat_id(long pat_id) {
 
 int Appointment::get_rating() const {
     return rating;
+}
+
+string Appointment::get_specialization() const {
+    return specialization;
 }
 
 

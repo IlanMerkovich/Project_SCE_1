@@ -22,8 +22,9 @@ private:
     long Patient_ID;
     int rating;
     string Area;
+    string specialization;
 public:
-    Appointment(const string date,const string time,const string Area,long Doc_id);
+    Appointment(const string date,const string time,const string Area,long Doc_id,string specialization);
     void saveToFile(const string &filename) const;
     static vector<Appointment> readFromFile(const string &filename);
     void Add_Summary(const string &summary);
@@ -42,6 +43,7 @@ public:
     void set_doc_id(long doc_id);
     void set_pat_id(long pat_id);
     int get_rating()const;
+    string get_specialization()const;
     };
 
 #endif //PROJECT_APPOINTMENT_H

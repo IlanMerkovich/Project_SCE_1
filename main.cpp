@@ -219,18 +219,18 @@ void displayPatientMenu(){
     cout << "Enter your choice (1-9): "<<endl;
     cout << "-------------------------------------------------" << endl;
 }
-void createAppointmentsForDate(const string &date, long doctorID, const string &area){
+void createAppointmentsForDate(const string &date, long doctorID, const string &area,string specialization){
     for (int hour = 9; hour <= 17; ++hour) {
         string time = (hour < 10 ? "0" : "") + to_string(hour) + ":00";
-        Appointment newAppointment(date, time,area,doctorID);
+        Appointment newAppointment(date, time,area,doctorID,specialization);
         newAppointment.saveToFile(APPOINTMENTSFILE);
         Appointments.push_back(newAppointment);
     }
     cout << "Appointments created successfully for date " << date << " from 9:00 to 17:00." << endl;
 }
-void display_doctor_choice1(){
+void display_my_profile(){
     cout << "*************************************************" << endl;
-    cout << "*                 Doctor Profile                *" << endl;
+    cout << "*                 My Profile                    *" << endl;
     cout << "*************************************************" << endl;
     cout << "*                                               *" <<endl;
     cout << "*             1.View My Profile                 *" <<endl;
@@ -250,6 +250,16 @@ void display_doctors_details(int index){
     cout << "*ID: "<<Doctors[index].get_id()<<endl;
     cout << "*************************************************" <<endl;
 }
+void display_patients_details(int index){
+    cout << "*************************************************" <<endl;
+    cout << "*                Patients Details               *" <<endl;
+    cout << "*************************************************" <<endl;
+    cout << "*Name: "<<Patients[index].get_name()<<endl;
+    cout << "*Phone number: "<<Patients[index].get_phone();
+    cout << "*Health Care Provider: "<<Patients[index].get_health_provider();
+    cout << "*ID: "<<Patients[index].get_id()<<endl;
+    cout << "*************************************************" <<endl;
+}
 void display_doctors_changes() {
     cout << "*************************************************" << endl;
     cout << "*                Edit my profile                *" << endl;
@@ -261,7 +271,17 @@ void display_doctors_changes() {
     cout << "*************************************************" << endl;
     cout<<endl;
 }
-void display_doctors_scheduald_app(int index){
+void display_patient_changes(){
+    cout << "*************************************************" << endl;
+    cout << "*                Edit my profile                *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "*         What would you like to change?:       *" << endl;
+    cout << "*            1. Phone number                    *" << endl;
+    cout << "*            2. Health Care provider            *" << endl;
+    cout << "*************************************************" << endl;
+    cout << endl;
+}
+void display_doctors_scheduled_app(int index){
     cout<<"***************************************************" <<endl;
     cout<<" Printing all appointments for "<<Doctors[index].get_name()<<""<<endl;
     for (int i = 0; i < Appointments.size(); ++i){
@@ -346,7 +366,7 @@ int main()
                             cin>>d_menu_choice;
                             if (d_menu_choice==1)
                             {
-                                display_doctor_choice1();
+                                display_my_profile();
                                 int profile_choice;
                                 cin >> profile_choice;
                                 if (profile_choice == 1) {
@@ -381,15 +401,15 @@ int main()
                                 }
                             }
                             if (d_menu_choice==2){
-                                display_doctors_scheduald_app(index);
+                                display_doctors_scheduled_app(index);
                                 cout<<endl;
                             }
                             if (d_menu_choice==3){
                                 cout<<"Please select a date you will be unavailable:"<<endl;
-                                string unavil_date;
-                                cin>>unavil_date;
+                                string unavail_date;
+                                cin>>unavail_date;
                                 for (int i = 0; i < Appointments.size(); ++i){
-                                    if (Appointments[i].get_date() == unavil_date && Appointments[i].get_doc_id() == Doctors[index].get_id()) {
+                                    if (Appointments[i].get_date() == unavail_date && Appointments[i].get_doc_id() == Doctors[index].get_id()) {
                                         Appointments[i].Make_Appointment_Unavail();
                                     }
                                 }
@@ -399,10 +419,10 @@ int main()
                                     cout<<"You have no appointments yet"<<endl;
                                 }
                                 else{
-                                    display_doctors_scheduald_app(index);
+                                    display_doctors_scheduled_app(index);
                                     cout<<endl;
                                     string update_date,update_time,app_summary;
-                                    cout<<"Enter appointment date and time you want to finsih and add summary:"<<endl;
+                                    cout<<"Enter appointment date and time you want to finish and add summary:"<<endl;
                                     cout<<"Enter date:"<<endl;
                                     cin>>update_date;
                                     cout<<"Enter time:"<<endl;
@@ -423,7 +443,7 @@ int main()
                                 cout<<"Please enter the date you will work to generate appointments:"<<endl;
                                 cin>>date_gen;
                                 cout<<"You chose to generate appointments on the "<<date_gen<<endl;
-                                createAppointmentsForDate(date_gen,Doctors[index].get_id(),Doctors[index].get_receptionarea());
+                                createAppointmentsForDate(date_gen,Doctors[index].get_id(),Doctors[index].get_receptionarea(),Doctors[index].get_specialization());
                                 cout<<endl;
                             }
                             if (d_menu_choice==6){
@@ -471,7 +491,42 @@ int main()
                             int p_menu_choice=0;
                             cin>>p_menu_choice;
                             if (p_menu_choice==1){
-
+                                display_my_profile();
+                                int profile_choice=0;
+                                cin>>profile_choice;
+                                if (profile_choice==1){
+                                    display_patients_details(index);
+                                    display_patient_changes();
+                                    int change_choice=0;
+                                    cin>>change_choice;
+                                    if (change_choice==1){
+                                        cout << "Enter your new phone number:";
+                                        string new_number;
+                                        cin >> new_number;
+                                        if (validate_phone_number(new_number)) {
+                                            Patients[index].set_phone(new_number);
+                                            cout << "** Phone number changed successfully **" << endl;
+                                        } else
+                                            cout << "Invalid Phone number. Try again!" << endl;
+                                    }
+                                    if (change_choice==2){
+                                        cout<<"Enter your new health care provider:"<<endl;
+                                        string new_health;
+                                        cin>>new_health;
+                                        Patients[index].set_healt_care(new_health);
+                                    }
+                                }
+                                if (profile_choice==2){
+                                    for (int i = 0; i < Appointments.size(); ++i){
+                                        if (Appointments[i].get_pat_id() == Patients[index].get_id() && !Appointments[i].check_if_over()){
+                                            Appointments[i].Print_Details();
+                                            cout<<endl;
+                                        }
+                                    }
+                                }
+                                if (profile_choice==3){
+                                    string chosen_date,area,specialization;
+                                }
                             }
 
                         }

@@ -55,6 +55,19 @@ vector<Patient> Patient::readFromFile(const string &filename) {
     return patients;
 }
 
+string Patient::get_health_provider() const {
+    return Health_Provider;
+}
+
+void Patient::set_phone(string phone_num) {
+    this->Phone_Number=phone_num;
+}
+
+void Patient::set_healt_care(string health_care) {
+    this->Health_Provider=health_care;
+}
+
+
 
 
 
