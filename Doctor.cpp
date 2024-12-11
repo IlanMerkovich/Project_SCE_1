@@ -60,5 +60,29 @@ vector<Doctor> Doctor::readFromFile(const string &filename) {
     return doctors;
 }
 
+string Doctor::get_receptionarea() const {
+    return Reception_Area;
+}
+
+string Doctor::get_specialization() const {
+    return Specialization;
+}
+
+long Doctor::get_licence() const {
+    return Licence_Number;
+}
+
+void Doctor::set_phone(string new_number) {
+    this->Phone_Number=new_number;
+}
+
+void Doctor::set_area(string new_area) {
+    this->Reception_Area=new_area;
+}
+
+void Doctor::set_spec(string new_spec) {
+    this->Specialization=new_spec;
+}
+
 
 

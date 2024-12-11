@@ -25,3 +25,7 @@ long User::get_password() const {
     return Password;
 }
 
+string User::get_phone() const {
+    return Phone_Number;
+}
+

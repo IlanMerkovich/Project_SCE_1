@@ -18,8 +18,14 @@ private:
 public:
     Doctor(string Name,long Id,string Phone_num,long Password,string Reception_Area,string Specialization,long Licence_Number);
     char *get_type()const;
-    void saveToFile(const string &filename) const;
+    void saveToFile(const string &filename)const;
     static vector<Doctor> readFromFile(const string &filename);
+    string get_receptionarea()const;
+    string get_specialization()const;
+    long get_licence()const;
+    void set_phone(string new_number);
+    void set_area(string new_area);
+    void set_spec(string new_spec);
 };
 
 

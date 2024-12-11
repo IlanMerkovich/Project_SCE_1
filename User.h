@@ -20,6 +20,7 @@ public:
     string get_name()const;
     long long get_id()const;
     long get_password()const;
+    string get_phone()const;
 };
 
 

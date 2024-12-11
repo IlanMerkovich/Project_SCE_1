@@ -7,6 +7,7 @@
 #include "string"
 #include "vector"
 #include "limits"
+
 #define PATIENTSFILE "Patients.txt"
 #define DOCTORSFILE "Doctors.txt"
 #define APPOINTMENTSFILE "Appointments.txt"
@@ -227,6 +228,49 @@ void createAppointmentsForDate(const string &date, long doctorID, const string &
     }
     cout << "Appointments created successfully for date " << date << " from 9:00 to 17:00." << endl;
 }
+void display_doctor_choice1(){
+    cout << "*************************************************" << endl;
+    cout << "*                 Doctor Profile                *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "*                                               *" <<endl;
+    cout << "*             1.View My Profile                 *" <<endl;
+    cout << "*             2.Edit my profile                 *" <<endl;
+    cout << "*                                               *" <<endl;
+    cout << "*************************************************" <<endl;
+}
+void display_doctors_details(int index){
+    cout << "*************************************************" <<endl;
+    cout << "*                Doctors Details:               *" <<endl;
+    cout << "*************************************************" <<endl;
+    cout << "*Name: "<<Doctors[index].get_name()<<endl;
+    cout << "*Phone number: "<<Doctors[index].get_phone()<<endl;
+    cout << "*Specialization: "<<Doctors[index].get_specialization()<<endl;
+    cout << "*Area of reception: "<<Doctors[index].get_receptionarea()<<endl;
+    cout << "*Licence number: "<<Doctors[index].get_licence()<<endl;
+    cout << "*ID: "<<Doctors[index].get_id()<<endl;
+    cout << "*************************************************" <<endl;
+}
+void display_doctors_changes() {
+    cout << "*************************************************" << endl;
+    cout << "*                Edit my profile                *" << endl;
+    cout << "*************************************************" << endl;
+    cout << "*         What would you like to change?:       *" << endl;
+    cout << "*            1. Phone number                    *" << endl;
+    cout << "*            2. Specialization                  *" << endl;
+    cout << "*            3. Area of Reception               *" << endl;
+    cout << "*************************************************" << endl;
+    cout<<endl;
+}
+void display_doctors_scheduald_app(int index){
+    cout<<"***************************************************" <<endl;
+    cout<<" Printing all appointments for "<<Doctors[index].get_name()<<""<<endl;
+    for (int i = 0; i < Appointments.size(); ++i){
+        if (Appointments[i].get_doc_id() == Doctors[index].get_id() && Appointments[i].check_if_booked()){
+            Appointments[i].Print_Details();
+        }
+    }
+}
+
 
 int main()
 {
@@ -237,7 +281,8 @@ int main()
         cin>>choice;
         while(true){
             int reg_log_choice=0;
-            if (choice==1){ //doctor//
+                                                            //doctor//
+            if (choice==1){
                 displayFirstScreen();
                 cin>>reg_log_choice;
                 if (reg_log_choice==1){
@@ -248,9 +293,81 @@ int main()
                     else{
                         while(true){
                             displayDoctorMenu();
+                            int menu_choice=0;
+                            cin>>menu_choice;
+                            if (menu_choice==1)
+                            {
+                                display_doctor_choice1();
+                                int profile_choice;
+                                cin >> profile_choice;
+                                if (profile_choice == 1) {
+                                    display_doctors_details(index);
+                                }
+                                if (profile_choice == 2) {
+                                    display_doctors_changes();
+                                    int edit_choice = 0;
+                                    cin >> edit_choice;
+                                    if (edit_choice == 1) {
+                                        cout << "Enter your new phone number:";
+                                        string new_number;
+                                        cin >> new_number;
+                                        if (validate_phone_number(new_number)) {
+                                            Doctors[index].set_phone(new_number);
+                                            cout << "** Phone number changed successfully **" << endl;
+                                        } else
+                                            cout << "Invalid Phone number. Try again!" << endl;
+                                    }
+                                    if (edit_choice == 2) {
+                                        cout << "Enter you new Specialization: " << endl;
+                                        string new_spec;
+                                        cin >> new_spec;
+                                        Doctors[index].set_spec(new_spec);
+                                    }
+                                    if (edit_choice == 3) {
+                                        cout << "Enter your new area of reception: " << endl;
+                                        string new_area;
+                                        cin >> new_area;
+                                        Doctors[index].set_area(new_area);
+                                    }
+                                }
+                            }
+                            if (menu_choice==2){
+                                display_doctors_scheduald_app(index);
+                                cout<<endl;
+                            }
+                            if (menu_choice==3){
+                                cout<<"Please select a date you will be unavailable:"<<endl;
+                                string unavil_date;
+                                cin>>unavil_date;
+                                for (int i = 0; i < Appointments.size(); ++i){
+                                    if (Appointments[i].get_date() == unavil_date && Appointments[i].get_doc_id() == Doctors[index].get_id()) {
+                                        Appointments[i].Make_Appointment_Unavail();
+                                    }
+                                }
+                            }
+                            if (menu_choice==4){
+                                cout<<"Your appointments are:"<<endl;
+                                display_doctors_scheduald_app(index);
+                                cout<<endl;
+                                string update_date,update_time;
+                                cout<<"Please enter date and time of the appointment you would like to close and comment:"<<endl;
+                                cout<<"Please Enter date:"<<endl;
+                                cin>>update_date;
+                                cout<<"Please Enter time:"<<endl;
+                                cin>>update_time;
+                                for (int i = 0; i < Appointments.size(); ++i){
+                                    if (Appointments[i].get_date()==update_date && Appointments[i].get_time()==update_time && Appointments[i].get_doc_id()==Doctors[index].get_id()){
+                                     string update_summary;
+                                     cout<<"Please write your appointment summary"<<endl;
+                                     cin.ignore();
+                                     getline(cin,update_summary);
+                                     Appointments[i].Add_Summary(update_summary);
+                                     cout<<"Summary was updated successfully"<<endl;
+                                    }
+                                }
+                            }
                         }
                     }
-
                 }
                 if (reg_log_choice==2){
                     Doctors.push_back(Register_doctor());
@@ -263,7 +380,8 @@ int main()
                     break;
                 }
             }
-            if (choice==2){ //patient//
+                                                          //patient//
+            if (choice==2){
                 displayFirstScreen();
                 cin >> reg_log_choice;
                 if (reg_log_choice == 1){
@@ -273,6 +391,9 @@ int main()
                     }
                     else{
                         while(true){
+                            displayPatientMenu();
+                            int menu_choice=0;
+                            cin>>menu_choice;
 
                         }
                     }
@@ -280,7 +401,8 @@ int main()
                 if (reg_log_choice == 2){
                     Patients.push_back(Register_patient());
                 }
-                if (reg_log_choice==3){ //exit to main menu//
+                                                       //exit to main menu//
+                if (reg_log_choice==3){
                     cout<<"====================="<<endl;
                     cout<<"Exiting to main menu!"<<endl;
                     cout<<"====================="<<endl;

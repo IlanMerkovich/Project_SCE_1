@@ -11,12 +11,11 @@ void Appointment::Add_Summary(const string &summary){
     is_over= true;
 }
 
-void Appointment::Book_Appointment(long Doctor_ID,long Patient_ID){
+void Appointment::Book_Appointment(long Patient_ID){
     if (is_booked){
         cout<<"This appointment is already booked"<<endl;
     }
     else{
-        this->Doctor_ID=Doctor_ID;
         this->Patient_ID=Patient_ID;
         is_booked= true;
     }
@@ -36,7 +35,7 @@ bool Appointment::check_if_booked(){
 }
 
 bool Appointment::check_if_over() {
-    return is_booked;
+    return is_over;
 }
 
 void Appointment::Cancel_Appointment(){
