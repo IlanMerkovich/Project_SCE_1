@@ -290,7 +290,35 @@ float calculate_doc_rating(int index){
     }
     return rating/counter;
 }
-
+void Save_all_data(){
+    ofstream file1(PATIENTSFILE, ios::out);
+    if (!file1) {
+        cout<<"Error: Could not open the file: " << PATIENTSFILE << std::endl;
+        return;
+    }
+    file1.close();
+    ofstream file2(DOCTORSFILE, ios::out);
+    if (!file2) {
+        cout<<"Error: Could not open the file: " << PATIENTSFILE << std::endl;
+        return;
+    }
+    file2.close();
+    ofstream file3(APPOINTMENTSFILE, ios::out);
+    if (!file3) {
+        cout<<"Error: Could not open the file: " << PATIENTSFILE << std::endl;
+        return;
+    }
+    file3.close();
+    for (int i = 0; i < Doctors.size(); ++i){
+        Doctors[i].saveToFile(DOCTORSFILE);
+    }
+    for (int i = 0; i < Patients.size(); ++i){
+        Patients[i].saveToFile(PATIENTSFILE);
+    }
+    for (int i = 0; i < Appointments.size(); ++i){
+        Appointments[i].saveToFile(APPOINTMENTSFILE);
+    }
+}
 
 int main()
 {
@@ -301,7 +329,8 @@ int main()
         cin>>choice;
         while(true){
             int reg_log_choice=0;
-            //doctor//
+                                                        //doctor//
+            //===================================================================================================//
             if (choice==1){
                 displayFirstScreen();
                 cin>>reg_log_choice;
@@ -313,9 +342,9 @@ int main()
                     else{
                         while(true){
                             displayDoctorMenu();
-                            int menu_choice=0;
-                            cin>>menu_choice;
-                            if (menu_choice==1)
+                            int d_menu_choice=0;
+                            cin>>d_menu_choice;
+                            if (d_menu_choice==1)
                             {
                                 display_doctor_choice1();
                                 int profile_choice;
@@ -351,11 +380,11 @@ int main()
                                     }
                                 }
                             }
-                            if (menu_choice==2){
+                            if (d_menu_choice==2){
                                 display_doctors_scheduald_app(index);
                                 cout<<endl;
                             }
-                            if (menu_choice==3){
+                            if (d_menu_choice==3){
                                 cout<<"Please select a date you will be unavailable:"<<endl;
                                 string unavil_date;
                                 cin>>unavil_date;
@@ -365,7 +394,7 @@ int main()
                                     }
                                 }
                             }
-                            if (menu_choice==4){
+                            if (d_menu_choice==4){
                                 if (calculate_doc_app_num(index)==0){
                                     cout<<"You have no appointments yet"<<endl;
                                 }
@@ -389,7 +418,7 @@ int main()
                                     }
                                 }
                             }
-                            if (menu_choice==5){
+                            if (d_menu_choice==5){
                                 string date_gen;
                                 cout<<"Please enter the date you will work to generate appointments:"<<endl;
                                 cin>>date_gen;
@@ -397,16 +426,16 @@ int main()
                                 createAppointmentsForDate(date_gen,Doctors[index].get_id(),Doctors[index].get_receptionarea());
                                 cout<<endl;
                             }
-                            if (menu_choice==6){
+                            if (d_menu_choice==6){
                                 cout<<"Displaying rating for: "<<Doctors[index].get_name()<<endl;
                                 cout<<"Your rating is: "<<calculate_doc_rating(index)<<" start!"<<endl;
-
                             }
-                            if (menu_choice==7){
+                            if (d_menu_choice==7){
                                 cout<<"Are you sure you want to exit? 1-yes,0-no"<<endl;
                                 int exit_choice;
                                 cin>>exit_choice;
                                 if (exit_choice==1){
+                                    Save_all_data();
                                     break;
                                 }
                                 else
@@ -426,7 +455,8 @@ int main()
                     break;
                 }
             }
-            //patient//
+            //===================================================================================================//
+                                                      //patient//
             if (choice==2){
                 displayFirstScreen();
                 cin >> reg_log_choice;
@@ -438,8 +468,12 @@ int main()
                     else{
                         while(true){
                             displayPatientMenu();
-                            int menu_choice=0;
-                            cin>>menu_choice;
+                            int p_menu_choice=0;
+                            cin>>p_menu_choice;
+                            if (p_menu_choice==1){
+
+                            }
+
                         }
                     }
                 }
