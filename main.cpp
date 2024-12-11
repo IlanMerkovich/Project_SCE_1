@@ -177,13 +177,9 @@ int Login_Patient(){
 }
 void displayDoctorMenu(){
     cout << "*************************************************" << endl;
-    cout << "*                                               *" << endl;
     cout << "*              WELCOME, DOCTOR!                 *" << endl;
-    cout << "*                                               *" << endl;
     cout << "*************************************************" << endl;
-    cout << "*                                               *" << endl;
     cout << "*       Here are your available options:        *" << endl;
-    cout << "*                                               *" << endl;
     cout << "*************************************************" << endl;
     cout << "1. View Profile" << endl;
     cout << "2. View Appointments" << endl;
@@ -198,13 +194,9 @@ void displayDoctorMenu(){
 }
 void displayPatientMenu(){
     cout << "*************************************************" << endl;
-    cout << "*                                               *" << endl;
     cout << "*              WELCOME, PATIENT!                *" << endl;
-    cout << "*                                               *" << endl;
     cout << "*************************************************" << endl;
-    cout << "*                                               *" << endl;
     cout << "*        Here are your available options:       *" << endl;
-    cout << "*                                               *" << endl;
     cout << "*************************************************" << endl;
     cout << "1. View Profile" << endl;
     cout << "2. View My Scheduled Appointments" << endl;
@@ -232,10 +224,8 @@ void display_my_profile(){
     cout << "*************************************************" << endl;
     cout << "*                 My Profile                    *" << endl;
     cout << "*************************************************" << endl;
-    cout << "*                                               *" <<endl;
     cout << "*             1.View My Profile                 *" <<endl;
     cout << "*             2.Edit my profile                 *" <<endl;
-    cout << "*                                               *" <<endl;
     cout << "*************************************************" <<endl;
 }
 void display_doctors_details(int index){
@@ -287,6 +277,7 @@ void display_doctors_scheduled_app(int index){
     for (int i = 0; i < Appointments.size(); ++i){
         if (Appointments[i].get_doc_id() == Doctors[index].get_id() && Appointments[i].check_if_booked()){
             Appointments[i].Print_Details();
+            cout<<endl;
         }
     }
 }
@@ -344,6 +335,7 @@ void Print_Appointments(int index){
     for (int i = 0; i < Appointments.size(); ++i){
         if (Appointments[i].get_pat_id() == Patients[index].get_id() && !Appointments[i].check_if_over() && Appointments[i].check_if_booked()){
             Appointments[i].Print_Details();
+            cout<<" INDEX -"<<i<<endl;
             counter++;
             cout<<"********************************************"<<endl;
             if (counter==0){
@@ -458,9 +450,22 @@ void digitalFirstAidGuide() {
         cout << endl;
     } while (choice != 0);
 }
-
-
-
+void BookAppointmentByIndex(int pat_index){
+    int appointment_index;
+    cout << "******* Appointment Booking *******" << endl;
+    cout << "Enter the index of the appointment you want to book:" << endl;
+    cin >> appointment_index;
+    if (appointment_index < 0 || appointment_index >= Appointments.size()) {
+        cout << "Invalid index. Please try again." << endl;
+        return;
+    }
+    if (Appointments[appointment_index].check_if_booked() || Appointments[appointment_index].check_if_unvail()){
+        cout << "The selected appointment is not available. Please choose a different one." << endl;
+        return;
+    }
+    Appointments[appointment_index].Book_Appointment(Patients[pat_index].get_id());
+    cout << "Appointment booked successfully!" << endl;
+}
 int main()
 {
     int choice=0;
@@ -593,6 +598,7 @@ int main()
                     cout<<"====================="<<endl;
                     cout<<"Exiting to main menu!"<<endl;
                     cout<<"====================="<<endl;
+                    Save_all_data();
                     break;
                 }
             }
@@ -653,6 +659,7 @@ int main()
                                 cout<<"*******Appointments Bank with filtering*******"<<endl;
                                 string chosen_date,area,specialization;
                                 int filter_choice=0;
+                                cout<<"IMPORTANT NOTICE - TO BOOK APPOINTMENT USE INDEX!"<<endl;
                                 cout<<"How would you like to filter the appointment?: 1-Date / 2-Area / 3-Specialization "<<endl;
                                 cin>>filter_choice;
                                 if (filter_choice==1){
@@ -663,6 +670,7 @@ int main()
                                     for (int i = 0; i < Appointments.size(); ++i){
                                         if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
                                             Appointments[i].Print_Details();
+                                            cout<<" INDEX - "<<i<<endl;
                                             counter++;
                                             cout<<"********************************************"<<endl;
                                         }
@@ -677,12 +685,12 @@ int main()
                                     int counter=0;
                                     cout<<"Printing all appointments in "<<area<<endl;
                                     for (int i = 0; i < Appointments.size(); ++i) {
-                                        if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                        if (Appointments[i].get_area()==area && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
                                             Appointments[i].Print_Details();
+                                            cout<<" INDEX - "<<i<<endl;
                                             cout<<"********************************************"<<endl;
                                             counter++;
                                         }
-
                                     }
                                     if (counter==0){
                                         cout<<"No appointments to display!"<<endl;
@@ -694,8 +702,9 @@ int main()
                                     int counter=0;
                                     cout<<"Printing all appointments for specialization: "<<specialization<<endl;
                                     for (int i = 0; i < Appointments.size(); ++i){
-                                        if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                        if (Appointments[i].get_specialization()==specialization && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
                                             Appointments[i].Print_Details();
+                                            cout<<" INDEX - "<<i<<endl;
                                             counter++;
                                             cout<<"********************************************"<<endl;
                                         }
@@ -706,7 +715,7 @@ int main()
                                 }
                             }
                             if (p_menu_choice==4){
-
+                                BookAppointmentByIndex(index);
                             }
                             if (p_menu_choice==5){
                                 string delete_date,delete_time;
@@ -782,10 +791,12 @@ int main()
                     cout<<"====================="<<endl;
                     cout<<"Exiting to main menu!"<<endl;
                     cout<<"====================="<<endl;
+                    Save_all_data();
                     break;
                 }
             }
             if (choice==3){
+                Save_all_data();
                 exit(0);
             }
         }
