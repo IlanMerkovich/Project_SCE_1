@@ -255,8 +255,8 @@ void display_patients_details(int index){
     cout << "*                Patients Details               *" <<endl;
     cout << "*************************************************" <<endl;
     cout << "*Name: "<<Patients[index].get_name()<<endl;
-    cout << "*Phone number: "<<Patients[index].get_phone();
-    cout << "*Health Care Provider: "<<Patients[index].get_health_provider();
+    cout << "*Phone number: "<<Patients[index].get_phone()<<endl;
+    cout << "*Health Care Provider: "<<Patients[index].get_health_provider()<<endl;
     cout << "*ID: "<<Patients[index].get_id()<<endl;
     cout << "*************************************************" <<endl;
 }
@@ -339,6 +339,127 @@ void Save_all_data(){
         Appointments[i].saveToFile(APPOINTMENTSFILE);
     }
 }
+void Print_Appointments(int index){
+    int counter=0;
+    for (int i = 0; i < Appointments.size(); ++i){
+        if (Appointments[i].get_pat_id() == Patients[index].get_id() && !Appointments[i].check_if_over() && Appointments[i].check_if_booked()){
+            Appointments[i].Print_Details();
+            counter++;
+            cout<<"********************************************"<<endl;
+            if (counter==0){
+                cout<<"No appointments to display!"<<endl;
+            }
+        }
+    }
+}
+void Print_Past_Appointments(int index){
+    int counter=0;
+    for (int i = 0; i < Appointments.size(); ++i){
+        if (Appointments[i].get_pat_id()==Patients[index].get_id() && Appointments[i].check_if_over()){
+            cout<<"Appointment summary of: "<<Appointments[i].get_date()<<" at "<<Appointments[i].get_time()<<endl;
+            cout<<"Doctor said: "<<endl;
+            Appointments[i].Print_Summary();
+            counter++;
+            cout<<endl;
+        }
+        if (counter==0){
+            cout<<"No appointments to display!"<<endl;
+        }
+    }
+}
+int Find_Appointment_Index(string date,string time){
+    for (int i = 0; i < Appointments.size(); ++i){
+        if (Appointments[i].get_time()==time && Appointments[i].get_date()==date){
+            return i;
+        }
+    }
+}
+
+void digitalFirstAidGuide() {
+    int choice;
+    do {
+        cout << "Digital First Aid Guide" << endl;
+        cout << "Please choose an emergency to see the instructions:" << endl;
+        cout << "1. Choking" << endl;
+        cout << "2. Heart Attack" << endl;
+        cout << "3. Stroke" << endl;
+        cout << "4. Severe Bleeding" << endl;
+        cout << "5. Burns" << endl;
+        cout << "6. Fainting" << endl;
+        cout << "7. Fractures" << endl;
+        cout << "0. Exit" << endl;
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                cout << "Choking:" << endl;
+                cout << "- Ask the person if they can cough or speak. If they cannot, they are choking." << endl;
+                cout << "- Perform the Heimlich maneuver: Stand behind them, wrap your arms around their waist, and give quick upward thrusts." << endl;
+                cout << "- If the object is not expelled, call emergency services immediately." << endl;
+                cout << "- For infants: Use gentle back blows and chest compressions." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 2:
+                cout << "Heart Attack:" << endl;
+                cout << "- Help the person to sit down and keep calm." << endl;
+                cout << "- Ask if they have medication like aspirin; if yes, let them take it unless allergic." << endl;
+                cout << "- Call emergency services immediately and provide details of the symptoms." << endl;
+                cout << "- Monitor their breathing and be ready to perform CPR if necessary." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 3:
+                cout << "Stroke:" << endl;
+                cout << "- Use the FAST method: Face drooping, Arm weakness, Speech difficulty, Time to call emergency services." << endl;
+                cout << "- Do not give the person food or drink." << endl;
+                cout << "- Keep them calm and in a comfortable position until help arrives." << endl;
+                cout << "- Monitor their breathing and be prepared to perform CPR if they lose consciousness." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 4:
+                cout << "Severe Bleeding:" << endl;
+                cout << "- Apply firm pressure directly to the wound with a clean cloth or bandage." << endl;
+                cout << "- If possible, elevate the injured area above heart level to reduce bleeding." << endl;
+                cout << "- Do not remove the cloth if it becomes soaked; instead, add another layer." << endl;
+                cout << "- Call emergency services immediately and keep the person calm." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 5:
+                cout << "Burns:" << endl;
+                cout << "- Cool the burn under running water for at least 10 minutes." << endl;
+                cout << "- Do not apply ice, creams, or ointments to the burn." << endl;
+                cout << "- Cover the burn with a clean, non-stick dressing or cloth." << endl;
+                cout << "- For severe burns, call emergency services and do not remove any clothing stuck to the burn." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 6:
+                cout << "Fainting:" << endl;
+                cout << "- Lay the person down flat and elevate their legs to improve blood flow." << endl;
+                cout << "- Ensure there is fresh air; loosen any tight clothing." << endl;
+                cout << "- If the person does not regain consciousness within 1-2 minutes, call emergency services." << endl;
+                cout << "- Monitor their breathing and keep them calm when they regain consciousness." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 7:
+                cout << "Fractures:" << endl;
+                cout << "- Immobilize the injured area by using a splint or padding to reduce movement." << endl;
+                cout << "- Do not try to straighten the bone or push it back in place." << endl;
+                cout << "- Apply an ice pack to reduce swelling, but do not apply it directly to the skin." << endl;
+                cout << "- Call emergency services and keep the person calm until help arrives." << endl;
+                cout << "Emergency Number: 101" << endl;
+                break;
+            case 0:
+                cout << "Exiting the guide. Stay safe!" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please select a valid option." << endl;
+                break;
+        }
+        cout << endl;
+    } while (choice != 0);
+}
+
+
 
 int main()
 {
@@ -475,6 +596,7 @@ int main()
                     break;
                 }
             }
+
             //===================================================================================================//
                                                       //patient//
             if (choice==2){
@@ -490,45 +612,165 @@ int main()
                             displayPatientMenu();
                             int p_menu_choice=0;
                             cin>>p_menu_choice;
-                            if (p_menu_choice==1){
+                            if (p_menu_choice==1) {
                                 display_my_profile();
-                                int profile_choice=0;
-                                cin>>profile_choice;
-                                if (profile_choice==1){
+                                int profile_choice = 0;
+                                cin >> profile_choice;
+                                if (profile_choice == 1) {
                                     display_patients_details(index);
+                                    cout<<endl;}
+                                if (profile_choice==2){
                                     display_patient_changes();
-                                    int change_choice=0;
-                                    cin>>change_choice;
-                                    if (change_choice==1){
+                                    cout<<endl;
+                                    int change_choice = 0;
+                                    cin >> change_choice;
+                                    if (change_choice == 1) {
                                         cout << "Enter your new phone number:";
                                         string new_number;
                                         cin >> new_number;
                                         if (validate_phone_number(new_number)) {
                                             Patients[index].set_phone(new_number);
                                             cout << "** Phone number changed successfully **" << endl;
-                                        } else
-                                            cout << "Invalid Phone number. Try again!" << endl;
-                                    }
-                                    if (change_choice==2){
-                                        cout<<"Enter your new health care provider:"<<endl;
-                                        string new_health;
-                                        cin>>new_health;
-                                        Patients[index].set_healt_care(new_health);
-                                    }
-                                }
-                                if (profile_choice==2){
-                                    for (int i = 0; i < Appointments.size(); ++i){
-                                        if (Appointments[i].get_pat_id() == Patients[index].get_id() && !Appointments[i].check_if_over()){
-                                            Appointments[i].Print_Details();
-                                            cout<<endl;
                                         }
+                                        else
+                                            cout << "Invalid Phone number. Try again!" << endl;
+                                        cout<<endl;
                                     }
-                                }
-                                if (profile_choice==3){
-                                    string chosen_date,area,specialization;
+                                    if (change_choice == 2) {
+                                        cout << "Enter your new health care provider:" << endl;
+                                        string new_health;
+                                        cin >> new_health;
+                                        Patients[index].set_healt_care(new_health);
+                                        cout<<endl;
+                                    }
                                 }
                             }
+                            if (p_menu_choice==2){
+                                cout<<"*******My Appointments*******"<<endl;
+                                Print_Appointments(index);
+                            }
+                            if (p_menu_choice==3){
+                                cout<<"*******Appointments Bank with filtering*******"<<endl;
+                                string chosen_date,area,specialization;
+                                int filter_choice=0;
+                                cout<<"How would you like to filter the appointment?: 1-Date / 2-Area / 3-Specialization "<<endl;
+                                cin>>filter_choice;
+                                if (filter_choice==1){
+                                    cout<<"Enter desired Date:"<<endl;
+                                    cin>>chosen_date;
+                                    int counter=0;
+                                    cout<<"Printing all appointments on: "<<chosen_date<<endl;
+                                    for (int i = 0; i < Appointments.size(); ++i){
+                                        if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                            Appointments[i].Print_Details();
+                                            counter++;
+                                            cout<<"********************************************"<<endl;
+                                        }
+                                    }
+                                    if (counter==0){
+                                        cout<<"No appointments to display!"<<endl;
+                                    }
+                                }
+                                if (filter_choice==2){
+                                    cout<<"Enter desired are: "<<endl;
+                                    cin>>area;
+                                    int counter=0;
+                                    cout<<"Printing all appointments in "<<area<<endl;
+                                    for (int i = 0; i < Appointments.size(); ++i) {
+                                        if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                            Appointments[i].Print_Details();
+                                            cout<<"********************************************"<<endl;
+                                            counter++;
+                                        }
 
+                                    }
+                                    if (counter==0){
+                                        cout<<"No appointments to display!"<<endl;
+                                    }
+                                }
+                                if (filter_choice==3){
+                                    cout<<"Enter desired specialization"<<endl;
+                                    cin>>specialization;
+                                    int counter=0;
+                                    cout<<"Printing all appointments for specialization: "<<specialization<<endl;
+                                    for (int i = 0; i < Appointments.size(); ++i){
+                                        if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                            Appointments[i].Print_Details();
+                                            counter++;
+                                            cout<<"********************************************"<<endl;
+                                        }
+                                    }
+                                    if (counter==0){
+                                        cout<<"No appointments to display!"<<endl;
+                                    }
+                                }
+                            }
+                            if (p_menu_choice==4){
+
+                            }
+                            if (p_menu_choice==5){
+                                string delete_date,delete_time;
+                                cout<<"*******Appointment Canceling*******"<<endl;
+                                cout<<"Here are your appointments: "<<endl;
+                                Print_Appointments(index);
+                                cout<<endl;
+                                cout<<"Enter date and time of appointment you would like to cancel: "<<endl;
+                                cout<<"Enter date: "<<endl;
+                                cin>>delete_date;
+                                cout<<"Enter time: "<<endl;
+                                cin>>delete_time;
+                                for (int i = 0; i < Appointments.size(); ++i){
+                                    if (Appointments[i].get_date()==delete_date && Appointments[i].get_time()==delete_time && Appointments[i].get_pat_id()==Patients[index].get_id()){
+                                        Appointments[i].Cancel_Appointment();
+                                    }
+                                }
+                            }
+                            if (p_menu_choice==6){
+                                Print_Past_Appointments(index);
+                                cout<<endl;
+                            }
+                            if (p_menu_choice==7){
+                                int counter=0,rating=0;
+                                cout<<"*******Doctor Rating*******"<<endl;
+                                string rate_date,rate_time;
+                                cout<<"Here are your past appointments"<<endl;
+                                for (int i = 0; i < Appointments.size(); ++i){
+                                    if (Appointments[i].get_pat_id() == Patients[index].get_id() &&
+                                        Appointments[i].check_if_over()) {
+                                        cout << Appointments[i].get_date() << " at "<< Appointments[i].get_time() << endl;
+                                        counter++;
+                                    }
+                                }
+                                if (counter!=0){
+                                    cout<<"Enter date and time of appointment you want to rate: "<<endl;
+                                    cout<<"Enter date: "<<endl;
+                                    cin>>rate_date;
+                                    cout<<"Enter time: "<<endl;
+                                    cin>>rate_time;
+                                    cout<<"Enter your rating for this appointments: "<<endl;
+                                    cin>>rating;
+                                    int rate_index;
+                                    rate_index= Find_Appointment_Index(rate_date,rate_time);
+                                    Appointments[rate_index].Rate_doc(rating);
+                                }
+                                else{
+                                    cout<<"No appointments to rate! "<<endl;
+                                }
+                            }
+                            if (p_menu_choice==8){
+                                digitalFirstAidGuide();
+                            }
+                            if (p_menu_choice==9){
+                                cout<<"Are you sure you want to exit? 1-yes,0-no"<<endl;
+                                int exit_choice;
+                                cin>>exit_choice;
+                                if (exit_choice==1){
+                                    Save_all_data();
+                                    break;
+                                }
+                                else
+                                    continue;
+                            }
                         }
                     }
                 }

@@ -12,24 +12,24 @@ Brain
 --------------------
 12/12/2024
 10:00
-Not given yet
-0
-0
+Every thing is ok!
+1
+1
 0
 318502739
-0
+307390401
 Ashdod
 0
 Brain
 --------------------
 12/12/2024
 11:00
-Not given yet
-0
-0
+All is ok!
+1
+1
 0
 318502739
-0
+307390401
 Ashdod
 0
 Brain

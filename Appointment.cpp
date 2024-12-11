@@ -39,8 +39,10 @@ bool Appointment::check_if_over() {
 }
 
 void Appointment::Cancel_Appointment(){
-    if (is_booked)
-        is_booked= false;
+    if (is_booked) {
+        is_booked = false;
+        Patient_ID=0;
+    }
     else
         cout<<"This appointment is not booked."<<endl;
 }
@@ -91,7 +93,7 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
         long doctorID, patientID;
         int rating;
         while (getline(file, date)) {
-            if (date == "--------------------") {
+            if (date == "--------------------"){
                 continue;
             }
             getline(file, time);
@@ -109,7 +111,7 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
             getline(file, area);
             file >> rating;
             file.ignore();
-            getline(file,specialization);
+            file >> specialization;
             file.ignore();
             Appointment appointment(date,time,area,doctorID,specialization);
             appointment.Add_Summary(doctorSummary);
@@ -165,6 +167,14 @@ int Appointment::get_rating() const {
 
 string Appointment::get_specialization() const {
     return specialization;
+}
+
+bool Appointment::check_if_unvail() const {
+    return this->is_canceled;
+}
+
+void Appointment::Rate_doc(int rate){
+    this->rating=rate;
 }
 
 

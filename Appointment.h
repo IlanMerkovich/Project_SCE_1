@@ -44,6 +44,8 @@ public:
     void set_pat_id(long pat_id);
     int get_rating()const;
     string get_specialization()const;
+    bool check_if_unvail()const;
+    void Rate_doc(int rate);
     };
 
 #endif //PROJECT_APPOINTMENT_H
