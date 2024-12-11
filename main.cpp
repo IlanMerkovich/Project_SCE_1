@@ -270,6 +270,15 @@ void display_doctors_scheduald_app(int index){
         }
     }
 }
+int calculate_doc_app_num(int index){
+    int counter=0;
+    for (int i = 0; i <Appointments.size(); ++i){
+        if (Appointments[i].check_if_booked() && Appointments[i].get_doc_id()==Doctors[index].get_id()){
+            counter++;
+        }
+    }
+    return counter;
+}
 
 
 int main()
@@ -281,7 +290,7 @@ int main()
         cin>>choice;
         while(true){
             int reg_log_choice=0;
-                                                            //doctor//
+            //doctor//
             if (choice==1){
                 displayFirstScreen();
                 cin>>reg_log_choice;
@@ -346,25 +355,49 @@ int main()
                                 }
                             }
                             if (menu_choice==4){
-                                cout<<"Your appointments are:"<<endl;
-                                display_doctors_scheduald_app(index);
-                                cout<<endl;
-                                string update_date,update_time;
-                                cout<<"Please enter date and time of the appointment you would like to close and comment:"<<endl;
-                                cout<<"Please Enter date:"<<endl;
-                                cin>>update_date;
-                                cout<<"Please Enter time:"<<endl;
-                                cin>>update_time;
-                                for (int i = 0; i < Appointments.size(); ++i){
-                                    if (Appointments[i].get_date()==update_date && Appointments[i].get_time()==update_time && Appointments[i].get_doc_id()==Doctors[index].get_id()){
-                                     string update_summary;
-                                     cout<<"Please write your appointment summary"<<endl;
-                                     cin.ignore();
-                                     getline(cin,update_summary);
-                                     Appointments[i].Add_Summary(update_summary);
-                                     cout<<"Summary was updated successfully"<<endl;
+                                if (calculate_doc_app_num(index)==0){
+                                    cout<<"You have no appointments yet"<<endl;
+                                }
+                                else{
+                                    display_doctors_scheduald_app(index);
+                                    cout<<endl;
+                                    string update_date,update_time,app_summary;
+                                    cout<<"Enter appointment date and time you want to finsih and add summary:"<<endl;
+                                    cout<<"Enter date:"<<endl;
+                                    cin>>update_date;
+                                    cout<<"Enter time:"<<endl;
+                                    cin>>update_time;
+                                    for (int i = 0; i < Appointments.size(); ++i) {
+                                        if (Appointments[i].get_time()==update_time && Appointments[i].get_date()==update_date && Appointments[i].get_doc_id()==Doctors[index].get_id()){
+                                            cout<<"Appointment found, Please enter your summary:"<<endl;
+                                            cin.ignore();
+                                            getline(cin,app_summary);
+                                            Appointments[i].Add_Summary(app_summary);
+                                            cout<<"Appointment summary updated successfully"<<endl;
+                                        }
                                     }
                                 }
+                            }
+                            if (menu_choice==5){
+                                string date_gen;
+                                cout<<"Please enter the date you will work to generate appointments:"<<endl;
+                                cin>>date_gen;
+                                cout<<"You chose to generate appointments on the "<<date_gen<<endl;
+                                createAppointmentsForDate(date_gen,Doctors[index].get_id(),Doctors[index].get_receptionarea());
+                                cout<<endl;
+                            }
+                            if (menu_choice==6){
+
+                            }
+                            if (menu_choice==7){
+                                cout<<"Are you sure you want to exit? 1-yes,0-no"<<endl;
+                                int exit_choice;
+                                cin>>exit_choice;
+                                if (exit_choice==1){
+                                    break;
+                                }
+                                else
+                                    continue;
                             }
                         }
                     }
@@ -380,7 +413,7 @@ int main()
                     break;
                 }
             }
-                                                          //patient//
+            //patient//
             if (choice==2){
                 displayFirstScreen();
                 cin >> reg_log_choice;
@@ -401,7 +434,7 @@ int main()
                 if (reg_log_choice == 2){
                     Patients.push_back(Register_patient());
                 }
-                                                       //exit to main menu//
+                //exit to main menu//
                 if (reg_log_choice==3){
                     cout<<"====================="<<endl;
                     cout<<"Exiting to main menu!"<<endl;
