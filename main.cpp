@@ -113,7 +113,7 @@ Doctor Register_doctor(){
 }
 void displayWelcomeScreen() {
     cout<<endl;
-    cout << "==================================================" << endl;
+    cout << "**************************************************" << endl;
     cout << "*                                                *" << endl;
     cout << "*             WELCOME TO HEALTH4U                *" << endl;
     cout << "*                                                *" << endl;
@@ -123,7 +123,7 @@ void displayWelcomeScreen() {
     cout << "*                                                *" << endl;
     cout << "**************************************************" << endl;
     cout << endl;
-    cout<< endl;
+    cout << endl;
     cout<<  "==================================================" <<endl;
     cout << "                 Are you a: " << endl;
     cout << "                 1. Doctor" << endl;
@@ -191,7 +191,7 @@ void displayDoctorMenu(){
     cout << "4. Update Past Appointments and Add Summary" << endl;
     cout << "5. Add Appointments" << endl;
     cout << "6. View Patient Ratings" << endl;
-    cout << "7. Logout" << endl;
+    cout << "7. Logout and save your actions" << endl;
     cout << "-------------------------------------------------" << endl;
     cout << "Enter your choice (1-7): "<<endl;
     cout << "-------------------------------------------------" << endl;
@@ -214,7 +214,7 @@ void displayPatientMenu(){
     cout << "6. View Past Appointment Summaries" << endl;
     cout << "7. Rate a Doctor for a Past Appointment" << endl;
     cout << "8. View First Aid Instructions" << endl;
-    cout << "9. Logout" << endl;
+    cout << "9. Logout and save your actions" << endl;
     cout << "-------------------------------------------------" << endl;
     cout << "Enter your choice (1-9): "<<endl;
     cout << "-------------------------------------------------" << endl;
@@ -278,6 +278,17 @@ int calculate_doc_app_num(int index){
         }
     }
     return counter;
+}
+float calculate_doc_rating(int index){
+    int counter=0;
+    float rating=0;
+    for (int i = 0; i < Appointments.size(); ++i) {
+        if (Appointments[i].get_doc_id()==Doctors[index].get_id() && Appointments[i].check_if_over()){
+            counter++;
+            rating+=Appointments[i].get_rating();
+        }
+    }
+    return rating/counter;
 }
 
 
@@ -387,6 +398,8 @@ int main()
                                 cout<<endl;
                             }
                             if (menu_choice==6){
+                                cout<<"Displaying rating for: "<<Doctors[index].get_name()<<endl;
+                                cout<<"Your rating is: "<<calculate_doc_rating(index)<<" start!"<<endl;
 
                             }
                             if (menu_choice==7){
@@ -427,7 +440,6 @@ int main()
                             displayPatientMenu();
                             int menu_choice=0;
                             cin>>menu_choice;
-
                         }
                     }
                 }

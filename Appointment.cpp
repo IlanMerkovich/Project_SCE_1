@@ -53,6 +53,7 @@ Appointment::Appointment(const string date, const string time,const string Area,
     Doctor_ID=Doc_id;
     Patient_ID=0;
     this->Area=Area;
+    rating=0;
     Doctor_Summary="Not given yet";
 }
 void Appointment::Make_Appointment_Unavail(){
@@ -70,6 +71,7 @@ void Appointment::saveToFile(const string &filename) const{
         file<<Doctor_ID<<endl;
         file<<Patient_ID<<endl;
         file<<Area<<endl;
+        file<<rating<<endl;
         file << "--------------------" << endl;
         file.close();
     }
@@ -85,6 +87,7 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
         string date, time, doctorSummary, area;
         bool isOver, isBooked, isCanceled;
         long doctorID, patientID;
+        int rating;
         while (getline(file, date)) {
             if (date == "--------------------") {
                 continue;
@@ -102,6 +105,8 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
             file >> patientID;
             file.ignore();
             getline(file, area);
+            file >> rating;
+            file.ignore();
             Appointment appointment(date,time,area,doctorID);
             appointment.Add_Summary(doctorSummary);
             appointment.is_over = isOver;
@@ -110,6 +115,7 @@ vector<Appointment> Appointment::readFromFile(const string &filename){
             appointment.Doctor_ID = doctorID;
             appointment.Patient_ID = patientID;
             appointment.Area = area;
+            appointment.rating=rating;
             appointments.push_back(appointment);
         }
         file.close();
@@ -146,6 +152,10 @@ void Appointment::set_doc_id(long doc_id) {
 
 void Appointment::set_pat_id(long pat_id) {
     this->Patient_ID=pat_id;
+}
+
+int Appointment::get_rating() const {
+    return rating;
 }
 
 
