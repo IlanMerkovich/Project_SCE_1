@@ -718,21 +718,15 @@ int main()
                                 BookAppointmentByIndex(index);
                             }
                             if (p_menu_choice==5){
-                                string delete_date,delete_time;
+                                int delete_index=0;
                                 cout<<"*******Appointment Canceling*******"<<endl;
                                 cout<<"Here are your appointments: "<<endl;
                                 Print_Appointments(index);
                                 cout<<endl;
-                                cout<<"Enter date and time of appointment you would like to cancel: "<<endl;
-                                cout<<"Enter date: "<<endl;
-                                cin>>delete_date;
-                                cout<<"Enter time: "<<endl;
-                                cin>>delete_time;
-                                for (int i = 0; i < Appointments.size(); ++i){
-                                    if (Appointments[i].get_date()==delete_date && Appointments[i].get_time()==delete_time && Appointments[i].get_pat_id()==Patients[index].get_id()){
-                                        Appointments[i].Cancel_Appointment();
-                                    }
-                                }
+                                cout<<"Enter the index of the appointment you want to cancel:"<<endl;
+                                cin>>delete_index;
+                                Appointments[delete_index].Cancel_Appointment();
+                                cout<<"Appointment cancelled successfully!"<<endl;
                             }
                             if (p_menu_choice==6){
                                 Print_Past_Appointments(index);
