@@ -1,6 +1,5 @@
 #include "iostream"
 #include "Appointment.h"
-#include "User.h"
 #include "Patient.h"
 #include "Doctor.h"
 #include "fstream"
@@ -271,12 +270,14 @@ void display_patient_changes(){
     cout << "*************************************************" << endl;
     cout << endl;
 }
+
 void display_doctors_scheduled_app(int index){
     cout<<"***************************************************" <<endl;
     cout<<" Printing all appointments for "<<Doctors[index].get_name()<<""<<endl;
     for (int i = 0; i < Appointments.size(); ++i){
-        if (Appointments[i].get_doc_id() == Doctors[index].get_id() && Appointments[i].check_if_booked()){
+        if (Appointments[i].get_doc_id() == Doctors[index].get_id() && Appointments[i].check_if_booked() && !Appointments[i].check_if_over()){
             Appointments[i].Print_Details();
+            cout<<" INDEX -"<<i<<endl;
             cout<<endl;
         }
     }
@@ -284,14 +285,14 @@ void display_doctors_scheduled_app(int index){
 int calculate_doc_app_num(int index){
     int counter=0;
     for (int i = 0; i <Appointments.size(); ++i){
-        if (Appointments[i].check_if_booked() && Appointments[i].get_doc_id()==Doctors[index].get_id()){
+        if (Appointments[i].check_if_booked() && Appointments[i].get_doc_id()==Doctors[index].get_id() && !Appointments[i].check_if_over()){
             counter++;
         }
     }
     return counter;
 }
 float calculate_doc_rating(int index){
-    int counter=0;
+    float counter=0;
     float rating=0;
     for (int i = 0; i < Appointments.size(); ++i) {
         if (Appointments[i].get_doc_id()==Doctors[index].get_id() && Appointments[i].check_if_over()){
@@ -338,10 +339,10 @@ void Print_Appointments(int index){
             cout<<" INDEX -"<<i<<endl;
             counter++;
             cout<<"********************************************"<<endl;
-            if (counter==0){
-                cout<<"No appointments to display!"<<endl;
-            }
         }
+    }
+    if (counter==0){
+        cout<<"No appointments to display!"<<endl;
     }
 }
 void Print_Past_Appointments(int index){
@@ -354,9 +355,9 @@ void Print_Past_Appointments(int index){
             counter++;
             cout<<endl;
         }
-        if (counter==0){
-            cout<<"No appointments to display!"<<endl;
-        }
+    }
+    if (counter==0){
+        cout<<"No appointments to display!"<<endl;
     }
 }
 int Find_Appointment_Index(string date,string time){
@@ -466,6 +467,7 @@ void BookAppointmentByIndex(int pat_index){
     Appointments[appointment_index].Book_Appointment(Patients[pat_index].get_id());
     cout << "Appointment booked successfully!" << endl;
 }
+
 int main()
 {
     int choice=0;
@@ -547,21 +549,13 @@ int main()
                                 else{
                                     display_doctors_scheduled_app(index);
                                     cout<<endl;
-                                    string update_date,update_time,app_summary;
-                                    cout<<"Enter appointment date and time you want to finish and add summary:"<<endl;
-                                    cout<<"Enter date:"<<endl;
-                                    cin>>update_date;
-                                    cout<<"Enter time:"<<endl;
-                                    cin>>update_time;
-                                    for (int i = 0; i < Appointments.size(); ++i) {
-                                        if (Appointments[i].get_time()==update_time && Appointments[i].get_date()==update_date && Appointments[i].get_doc_id()==Doctors[index].get_id()){
-                                            cout<<"Appointment found, Please enter your summary:"<<endl;
-                                            cin.ignore();
-                                            getline(cin,app_summary);
-                                            Appointments[i].Add_Summary(app_summary);
-                                            cout<<"Appointment summary updated successfully"<<endl;
-                                        }
-                                    }
+                                    int app_index=0;
+                                    cout<<"Please enter the index of the appointment you want to commit and add a summary:"<<endl;
+                                    cin>>app_index;
+                                    cout<<"Please enter your summary:"<<endl;
+                                    string summary;
+                                    cin>>summary;
+                                    Appointments[app_index].Add_Summary(summary);
                                 }
                             }
                             if (d_menu_choice==5){
@@ -574,7 +568,7 @@ int main()
                             }
                             if (d_menu_choice==6){
                                 cout<<"Displaying rating for: "<<Doctors[index].get_name()<<endl;
-                                cout<<"Your rating is: "<<calculate_doc_rating(index)<<" start!"<<endl;
+                                cout<<"Your rating is: "<<calculate_doc_rating(index)<<" STARS!"<<endl;
                             }
                             if (d_menu_choice==7){
                                 cout<<"Are you sure you want to exit? 1-yes,0-no"<<endl;
@@ -719,6 +713,7 @@ int main()
                             }
                             if (p_menu_choice==5){
                                 int delete_index=0;
+                                cout<<endl;
                                 cout<<"*******Appointment Canceling*******"<<endl;
                                 cout<<"Here are your appointments: "<<endl;
                                 Print_Appointments(index);
@@ -734,27 +729,26 @@ int main()
                             }
                             if (p_menu_choice==7){
                                 int counter=0,rating=0;
+                                cout<<endl;
                                 cout<<"*******Doctor Rating*******"<<endl;
-                                string rate_date,rate_time;
+                                cout<<endl;
                                 cout<<"Here are your past appointments"<<endl;
                                 for (int i = 0; i < Appointments.size(); ++i){
                                     if (Appointments[i].get_pat_id() == Patients[index].get_id() &&
-                                        Appointments[i].check_if_over()) {
-                                        cout << Appointments[i].get_date() << " at "<< Appointments[i].get_time() << endl;
+                                        Appointments[i].check_if_over() && Appointments[i].get_rating()==0) {
+                                        cout << Appointments[i].get_date() << " at "<< Appointments[i].get_time() <<" INDEX- "<<i<<endl;
                                         counter++;
                                     }
                                 }
                                 if (counter!=0){
-                                    cout<<"Enter date and time of appointment you want to rate: "<<endl;
-                                    cout<<"Enter date: "<<endl;
-                                    cin>>rate_date;
-                                    cout<<"Enter time: "<<endl;
-                                    cin>>rate_time;
-                                    cout<<"Enter your rating for this appointments: "<<endl;
+                                    int index_rate;
+                                    cout<<"Enter the index of the appointment you want to rate:"<<endl;
+                                    cin>>index_rate;
+                                    cout<<"Enter your rating:"<<endl;
                                     cin>>rating;
-                                    int rate_index;
-                                    rate_index= Find_Appointment_Index(rate_date,rate_time);
-                                    Appointments[rate_index].Rate_doc(rating);
+                                    Appointments[index_rate];
+                                    cout<<"Rating added successfully!"<<endl;
+                                    Appointments[index_rate].Rate_doc(rating);
                                 }
                                 else{
                                     cout<<"No appointments to rate! "<<endl;

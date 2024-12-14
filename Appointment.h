@@ -20,7 +20,7 @@ private:
     bool is_canceled;
     long Doctor_ID;
     long Patient_ID;
-    int rating;
+    float rating;
     string Area;
     string specialization;
 public:
