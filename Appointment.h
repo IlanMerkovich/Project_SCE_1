@@ -27,7 +27,7 @@ public:
     Appointment(const string date,const string time,const string Area,long Doc_id,string specialization);
     void saveToFile(const string &filename) const;
     static vector<Appointment> readFromFile(const string &filename);
-    void Add_Summary(const string &summary);
+    void Add_Summary(string summary);
     void Book_Appointment(long Patient_ID);
     void Print_Details();
     void Print_Summary();

@@ -10,11 +10,13 @@
 #define PATIENTSFILE "Patients.txt"
 #define DOCTORSFILE "Doctors.txt"
 #define APPOINTMENTSFILE "Appointments.txt"
+
 using namespace std;
 
 vector<Patient> Patients = Patient::readFromFile(PATIENTSFILE);
 vector<Doctor> Doctors = Doctor::readFromFile(DOCTORSFILE);
 vector<Appointment> Appointments = Appointment::readFromFile(APPOINTMENTSFILE);
+
 
 bool validate_id(long id){
     string id_str= to_string(id);
@@ -144,21 +146,23 @@ void displayFirstScreen() {
     cout << "==============================================" << endl;
     cout << "Please select an option (1-3): ";
 }
-int Login_Doctor(){
-    long id=0,password=0;
+int Login_Doctor() {
+    long id = 0, password = 0;
     cout << "===============================" << endl;
-    cout << "Enter your ID (9-Digits):"<<endl;
-    cin >>id;
-    cout << "Enter your password:"<<endl;
-    cin>> password;
+    cout << "Enter your ID (9-Digits):" << endl;
+    cin >> id;
+    cout << "Enter your password:" << endl;
+    cin >> password;
     cout << "===============================" << endl;
-    for (int i = 0; i < Doctors.size(); ++i){
-        if (Doctors[i].get_id()==id && Doctors[i].get_password()==password){
+    for (int i = 0; i < Doctors.size(); ++i) {
+        if (Doctors[i].get_id() == id && Doctors[i].get_password() == password) {
+            cout << "Login successful!" << endl;
             return i;
         }
     }
     return -1;
 }
+
 int Login_Patient(){
     long id=0,password=0;
     cout << "===============================" << endl;
@@ -169,6 +173,7 @@ int Login_Patient(){
     cout << "===============================" << endl;
     for (int i = 0; i < Patients.size(); ++i){
         if (Patients[i].get_id()==id && Patients[i].get_password()==password){
+            cout<<"Login successful!"<<endl;
             return i;
         }
     }
@@ -271,17 +276,6 @@ void display_patient_changes(){
     cout << endl;
 }
 
-void display_doctors_scheduled_app(int index){
-    cout<<"***************************************************" <<endl;
-    cout<<" Printing all appointments for "<<Doctors[index].get_name()<<""<<endl;
-    for (int i = 0; i < Appointments.size(); ++i){
-        if (Appointments[i].get_doc_id() == Doctors[index].get_id() && Appointments[i].check_if_booked() && !Appointments[i].check_if_over()){
-            Appointments[i].Print_Details();
-            cout<<" INDEX -"<<i<<endl;
-            cout<<endl;
-        }
-    }
-}
 int calculate_doc_app_num(int index){
     int counter=0;
     for (int i = 0; i <Appointments.size(); ++i){
@@ -295,7 +289,7 @@ float calculate_doc_rating(int index){
     float counter=0;
     float rating=0;
     for (int i = 0; i < Appointments.size(); ++i) {
-        if (Appointments[i].get_doc_id()==Doctors[index].get_id() && Appointments[i].check_if_over()){
+        if (Appointments[i].get_doc_id()==Doctors[index].get_id() && Appointments[i].check_if_over() && Appointments[i].get_rating()!=0){
             counter++;
             rating+=Appointments[i].get_rating();
         }
@@ -331,12 +325,26 @@ void Save_all_data(){
         Appointments[i].saveToFile(APPOINTMENTSFILE);
     }
 }
+string Get_Doctors_Name(long doc_id){
+    for (int i = 0; i < Doctors.size(); ++i){
+        if (Doctors[i].get_id()==doc_id){
+            return Doctors[i].get_name();
+        }
+    }
+}
+string Get_Patients_Name(long pat_id){
+    for (int i = 0; i < Patients.size(); ++i){
+        if (Patients[i].get_id()==pat_id){
+            return Patients[i].get_name();
+        }
+    }
+}
 void Print_Appointments(int index){
     int counter=0;
     for (int i = 0; i < Appointments.size(); ++i){
         if (Appointments[i].get_pat_id() == Patients[index].get_id() && !Appointments[i].check_if_over() && Appointments[i].check_if_booked()){
             Appointments[i].Print_Details();
-            cout<<" INDEX -"<<i<<endl;
+            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
             counter++;
             cout<<"********************************************"<<endl;
         }
@@ -467,6 +475,17 @@ void BookAppointmentByIndex(int pat_index){
     Appointments[appointment_index].Book_Appointment(Patients[pat_index].get_id());
     cout << "Appointment booked successfully!" << endl;
 }
+void display_doctors_scheduled_app(int index){
+    cout<<"===================================================" <<endl;
+    cout<<" Printing all appointments for "<<Doctors[index].get_name()<<""<<endl;
+    for (int i = 0; i < Appointments.size(); ++i){
+        if (Appointments[i].get_doc_id() == Doctors[index].get_id() && Appointments[i].check_if_booked() && !Appointments[i].check_if_over()){
+            Appointments[i].Print_Details();
+            cout<<" INDEX -"<<i<<" .Patient - "<<Get_Patients_Name(Appointments[i].get_pat_id())<<endl;
+            cout<<endl;
+        }
+    }
+}
 
 int main()
 {
@@ -552,9 +571,11 @@ int main()
                                     int app_index=0;
                                     cout<<"Please enter the index of the appointment you want to commit and add a summary:"<<endl;
                                     cin>>app_index;
+                                    cin.ignore();
                                     cout<<"Please enter your summary:"<<endl;
                                     string summary;
-                                    cin>>summary;
+                                    getline(cin,summary);
+                                    cin.ignore();
                                     Appointments[app_index].Add_Summary(summary);
                                 }
                             }
@@ -664,9 +685,8 @@ int main()
                                     for (int i = 0; i < Appointments.size(); ++i){
                                         if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
                                             Appointments[i].Print_Details();
-                                            cout<<" INDEX - "<<i<<endl;
+                                            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
                                             counter++;
-                                            cout<<"********************************************"<<endl;
                                         }
                                     }
                                     if (counter==0){
@@ -681,8 +701,7 @@ int main()
                                     for (int i = 0; i < Appointments.size(); ++i) {
                                         if (Appointments[i].get_area()==area && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
                                             Appointments[i].Print_Details();
-                                            cout<<" INDEX - "<<i<<endl;
-                                            cout<<"********************************************"<<endl;
+                                            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
                                             counter++;
                                         }
                                     }
@@ -698,9 +717,8 @@ int main()
                                     for (int i = 0; i < Appointments.size(); ++i){
                                         if (Appointments[i].get_specialization()==specialization && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
                                             Appointments[i].Print_Details();
-                                            cout<<" INDEX - "<<i<<endl;
+                                            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
                                             counter++;
-                                            cout<<"********************************************"<<endl;
                                         }
                                     }
                                     if (counter==0){

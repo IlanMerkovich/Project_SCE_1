@@ -6,7 +6,7 @@
 using namespace std;
 
 
-void Appointment::Add_Summary(const string &summary){
+void Appointment::Add_Summary(string summary){
     Doctor_Summary=summary;
     is_over= true;
 }
